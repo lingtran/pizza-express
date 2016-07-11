@@ -72,6 +72,18 @@ describe('Server', () => {
         done();
       });
     });
+
+    it('should redirect the user to their new pizza', (done) => {
+      var payload = { pizza: fixtures.validPizza };
+
+      this.request.post('/pizzas', { form: payload }, (error, response) => {
+        if (error) { done(error); }
+        var newPizzaId = Object.keys(app.locals.pizzas)[0];
+        assert.equal(response.headers.location, '/pizzas/' + newPizzaId);
+        done();
+      });
+    });
+
   });
 
   describe('GET /pizzas/:id', () => {
@@ -106,8 +118,8 @@ describe('Server', () => {
         assert(response.body.includes(pizza.toppings[0], `"${response.body}" does not include "${pizza.toppings[0]}."`));
         assert.equal(pizzaToppingsCount, 4, `expected 5 toppings in pizza, got "${pizzaToppingsCount}".`);
         done();
-      })
-    })
+      });
+    });
   });
 
 });
