@@ -18,4 +18,6 @@ if (!module.parent){
   });
 }
 
+app.set('view engine', 'jade');
+
 module.exports = app;
