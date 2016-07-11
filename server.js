@@ -32,11 +32,13 @@ if (!module.parent){
 }
 
 app.post('/pizzas', (request, response) => {
+  if (!request.body.pizza) { return response.sendStatus(400); }
+
   var id = generateId();
 
-  app.locals.pizzas[id] = request.body;
+  app.locals.pizzas[id] = request.body.pizza;
 
-  response.sendStatus(201);
+  response.redirect('/pizzas/' + id);
 });
 
 app.set('view engine', 'jade');
