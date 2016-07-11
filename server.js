@@ -20,6 +20,11 @@ app.get('/', (request, response) => {
   response.render('index');
 });
 
+app.get('/pizzas/:id', (request, response) => {
+  var pizza = app.locals.pizzas[request.params.id];
+  response.render('pizza', { pizza: pizza });
+});
+
 if (!module.parent){
   app.listen(app.get('port'), () => {
     console.log(`${app.locals.title} is running on ${app.get('port')}.`);

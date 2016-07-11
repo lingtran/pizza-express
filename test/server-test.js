@@ -74,4 +74,40 @@ describe('Server', () => {
     });
   });
 
+  describe('GET /pizzas/:id', () => {
+    beforeEach(() => {
+      app.locals.pizzas.testPizza = fixtures.validPizza;
+    });
+
+    it('should not return a 404', (done) => {
+      this.request.get('/pizzas/testPizza', (error, response) => {
+        if (error) { done(error); }
+        assert.notEqual(response.statusCode, 404);
+        done();
+      });
+    });
+
+    it('should return in a page that has the title of the pizza', (done) => {
+      var pizza = app.locals.pizzas.testPizza;
+
+      this.request.get('/pizzas/testPizza', (error, response) => {
+        if (error) { done(error); }
+        assert(response.body.includes(pizza.name), `"${response.body}" does not include "${pizza.name}".`);
+        done();
+      });
+    });
+
+    it('should return a page that has each of the toppings of the pizza', (done) => {
+      var pizza = app.locals.pizzas.testPizza;
+      var pizzaToppingsCount = Object.keys(pizza.toppings).length;
+
+      this.request.get('/pizzas/testPizza', (error, response) => {
+        if (error) { done(error); }
+        assert(response.body.includes(pizza.toppings[0], `"${response.body}" does not include "${pizza.toppings[0]}."`));
+        assert.equal(pizzaToppingsCount, 4, `expected 5 toppings in pizza, got "${pizzaToppingsCount}".`);
+        done();
+      })
+    })
+  });
+
 });
