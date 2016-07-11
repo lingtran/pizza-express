@@ -97,6 +97,17 @@ describe('Server', () => {
       });
     });
 
+    it('should return a page that has each of the toppings of the pizza', (done) => {
+      var pizza = app.locals.pizzas.testPizza;
+      var pizzaToppingsCount = Object.keys(pizza.toppings).length;
+
+      this.request.get('/pizzas/testPizza', (error, response) => {
+        if (error) { done(error); }
+        assert(response.body.includes(pizza.toppings[0], `"${response.body}" does not include "${pizza.toppings[0]}."`));
+        assert.equal(pizzaToppingsCount, 4, `expected 5 toppings in pizza, got "${pizzaToppingsCount}".`);
+        done();
+      })
+    })
   });
 
 });
